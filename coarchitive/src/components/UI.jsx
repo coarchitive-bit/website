@@ -359,7 +359,8 @@ export function ScrollStatement({ id, kicker, text, dark }) {
 // ---------- hover list ----------
 
 // Rows that reveal a photograph trailing the cursor (mouse only). Each item:
-// { title, meta, img, to } for an internal link or { …, href } for mailto etc.
+// { title, meta, img, to } for an internal link, { …, href } for mailto etc.
+// or { …, onSelect } to handle the click in the page (e.g. open a dialog).
 export function HoverList({ items }) {
   const wrap = useRef(null);
   const float = useRef(null);
@@ -420,7 +421,11 @@ export function HoverList({ items }) {
         const props = { className: "hlist-row", onPointerEnter: () => setActive(i) };
         return (
           <Reveal key={it.title} delay={i * 70}>
-            {it.href ? (
+            {it.onSelect ? (
+              <button type="button" onClick={it.onSelect} {...props}>
+                {inner}
+              </button>
+            ) : it.href ? (
               <a href={it.href} {...props}>
                 {inner}
               </a>

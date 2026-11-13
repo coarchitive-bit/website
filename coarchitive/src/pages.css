@@ -436,6 +436,17 @@
   border-bottom: 1px solid var(--line);
   transition: color var(--t-fast), padding var(--t-mid) var(--ease-out);
 }
+/* rows rendered as buttons (click handled by the page) match the links */
+button.hlist-row {
+  width: 100%;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
 .hlist-row:hover { color: var(--accent); padding-left: 14px; }
 .hlist-no { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--muted); }
 .hlist-row h3 { font-size: clamp(22px, 3vw, 44px); line-height: 1.08; letter-spacing: -0.03em; }
@@ -644,6 +655,40 @@
 .process-no { display: block; font-family: var(--serif); font-style: italic; font-size: clamp(38px, 3.4vw, 52px); line-height: 1; color: var(--sand-soft); }
 .process h3 { margin: 18px 0 10px; font-size: clamp(20px, 1.8vw, 24px); }
 .process p { max-width: 30ch; font-size: 15px; line-height: 1.6; color: rgba(242, 241, 238, 0.62); }
+
+/* apply-by-email panel, opened by clicking an open role */
+.apply-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(16, 20, 18, 0.55);
+  backdrop-filter: blur(3px);
+  animation: applyFade 0.25s var(--ease-out) both;
+}
+@keyframes applyFade { from { opacity: 0; } }
+.apply-card {
+  position: relative;
+  width: min(520px, 100%);
+  padding: clamp(26px, 3vw, 38px);
+  background: var(--paper-hi);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+  animation: inUp 0.4s var(--ease-out) both;
+}
+.apply-x { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 32px; height: 32px; color: var(--muted); }
+.apply-x:hover { color: var(--ink); }
+.apply-title { margin: 12px 0 6px; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.1; letter-spacing: -0.02em; }
+.apply-meta { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.apply-body { margin-top: 18px; font-size: 15px; line-height: 1.65; color: var(--muted); }
+.apply-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 26px; }
+.apply-status { min-height: 20px; margin-top: 14px; font-size: 13.5px; color: var(--accent); }
+@media (prefers-reduced-motion: reduce) {
+  .apply-veil, .apply-card { animation: none; }
+}
 
 /* ---------- contact ---------- */
 
