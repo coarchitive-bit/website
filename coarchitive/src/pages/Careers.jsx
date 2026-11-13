@@ -8,14 +8,23 @@ import { ROLES, VALUES, CONTACT, HIRING, EXPERTISE, WORK_WITH_US } from "../data
 const roleImg = (team) =>
   (EXPERTISE.find((e) => e.title === team) ?? EXPERTISE[0]).img.replace("w=1600", "w=900");
 
+const subjectFor = (role) => `Application: ${role.title}`;
+const bodyFor = (role) =>
+  `Hello CoArchitive team,\n\nI'd like to apply for the ${role.title} role (${role.team} · ${role.type} · ${role.loc}).\nMy CV and portfolio are attached.\n\nThank you,\n`;
+
+// Gmail's web compose window, pre-filled. Opens in a new tab so the careers
+// page stays where it is.
+const gmailFor = (role) =>
+  `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(CONTACT.email)}` +
+  `&su=${encodeURIComponent(subjectFor(role))}&body=${encodeURIComponent(bodyFor(role))}`;
+
+// fallback for anyone not on Gmail — hands the draft to their desktop mail app
 const mailtoFor = (role) =>
-  `mailto:${CONTACT.email}?subject=${encodeURIComponent(`Application: ${role.title}`)}&body=${encodeURIComponent(
-    `Hello CoArchitive team,\n\nI'd like to apply for the ${role.title} role (${role.team} · ${role.type} · ${role.loc}).\nMy CV and portfolio are attached.\n\nThank you,\n`
-  )}`;
+  `mailto:${CONTACT.email}?subject=${encodeURIComponent(subjectFor(role))}&body=${encodeURIComponent(bodyFor(role))}`;
 
 // Clicking a role opens this panel instead of jumping straight to a mail
-// client: it shows the address, opens a pre-filled draft and confirms once
-// the draft has been handed to the mail app.
+// client: it shows the address, opens a pre-filled Gmail draft and confirms
+// once the draft has been opened.
 function ApplyDialog({ role, onClose }) {
   const [copied, setCopied] = useState(false);
   const [opened, setOpened] = useState(false);
@@ -36,8 +45,8 @@ function ApplyDialog({ role, onClose }) {
     );
   };
 
-  const openMail = () => {
-    window.location.href = mailtoFor(role);
+  const openGmail = () => {
+    window.open(gmailFor(role), "_blank", "noopener,noreferrer");
     setOpened(true);
   };
 
@@ -58,15 +67,15 @@ function ApplyDialog({ role, onClose }) {
         <h3 className="apply-title">{role.title}</h3>
         <p className="apply-meta">{`${role.team} · ${role.type} · ${role.loc}`}</p>
         <p className="apply-body">
-          Applications for this role are read by email. We will open a draft addressed to{" "}
+          Applications for this role are read by email. We will open a Gmail draft addressed to{" "}
           <span className="note-mail">{CONTACT.email}</span> with the subject already filled in —
           attach your CV and portfolio before sending.
         </p>
 
         <div className="apply-actions">
-          <button type="button" className="btn-md" onClick={openMail}>
+          <button type="button" className="btn-md" onClick={openGmail}>
             <Mail size={16} />
-            {opened ? "Open the draft again" : "Send email"}
+            {opened ? "Open Gmail again" : "Send email via Gmail"}
           </button>
           <button type="button" className="btn ghost-btn sm" onClick={copy}>
             {copied ? <Check size={15} /> : <Copy size={15} />}
@@ -76,11 +85,14 @@ function ApplyDialog({ role, onClose }) {
 
         <p className="apply-status" role="status" aria-live="polite">
           {opened
-            ? "Email draft opened in your mail app — attach your CV and hit send."
+            ? "Gmail draft opened in a new tab — attach your CV and hit send."
             : copied
               ? "Address copied to your clipboard."
               : ""}
         </p>
+        <a className="apply-alt" href={mailtoFor(role)}>
+          Prefer your own mail app? Open the draft there instead.
+        </a>
       </div>
     </div>
   );

@@ -686,6 +686,8 @@ button.hlist-row {
 .apply-body { margin-top: 18px; font-size: 15px; line-height: 1.65; color: var(--muted); }
 .apply-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 26px; }
 .apply-status { min-height: 20px; margin-top: 14px; font-size: 13.5px; color: var(--accent); }
+.apply-alt { display: inline-block; margin-top: 4px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); transition: color var(--t-fast); }
+.apply-alt:hover { color: var(--ink); }
 @media (prefers-reduced-motion: reduce) {
   .apply-veil, .apply-card { animation: none; }
 }
