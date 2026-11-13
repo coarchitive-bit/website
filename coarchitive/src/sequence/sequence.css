@@ -1,0 +1,724 @@
+/* =========================================================================
+   The build sequence — a pinned stage the page scrolls through.
+   ========================================================================= */
+
+.bs {
+  position: relative;
+  height: calc(var(--acts, 8) * 100vh);
+  background: var(--paper);
+}
+
+.bs-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ------------------------------------------------------------------- sky */
+
+.bs-skies {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bs-sky {
+  position: absolute;
+  inset: 0;
+  will-change: opacity;
+}
+
+.sky-sheet,
+.sky-concept {
+  background: linear-gradient(180deg, #f2efe7 0%, #ebe7dd 100%);
+}
+
+.sky-plan {
+  background: linear-gradient(180deg, #345983 0%, #1d4269 55%, #16314f 100%);
+}
+
+.sky-model {
+  background: linear-gradient(180deg, #e2e1dd 0%, #eceae4 55%, #dfe0db 100%);
+}
+
+.sky-build {
+  background: linear-gradient(180deg, #d1dfe2 0%, #e4e8de 45%, #f7f4d3 100%);
+}
+
+.sky-live {
+  background: linear-gradient(180deg, #c9d1d3 0%, #d6d2c0 42%, #bfb089 100%);
+}
+
+.sky-services {
+  background: linear-gradient(180deg, #1d2740 0%, #333a57 45%, #7d6675 100%);
+}
+
+.sky-city {
+  background: linear-gradient(180deg, #eae7e2 0%, #f5f2ed 100%);
+}
+
+/* the faint drafting grid on the paper acts */
+.bs-grid-paper {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(26, 26, 22, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 26, 22, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse at 30% 40%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 30% 40%, #000 0%, transparent 72%);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- model */
+
+.bs-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* ----------------------------------------------------------- paper acts */
+
+.bs-2d {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.bs-2d-slot {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  will-change: opacity;
+}
+
+.bs-svg {
+  width: min(62vw, 980px);
+  height: auto;
+  overflow: visible;
+  transform: translateX(14%);
+}
+
+@media (max-width: 900px) {
+  .bs-svg {
+    width: 94vw;
+    transform: translateY(16%);
+  }
+}
+
+.bs-sketch .sk-dash path,
+.bs-sketch .sk-line path,
+.bs-sketch .sk-soft path,
+.bs-sketch .sk-soft circle {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.bs-sketch .sk-dash path {
+  stroke: rgba(26, 26, 22, 0.45);
+  stroke-width: 1.5px;
+  stroke-dasharray: 11 9;
+}
+
+.bs-sketch .sk-line path {
+  stroke: rgba(26, 26, 22, 0.75);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+.bs-sketch .sk-soft path,
+.bs-sketch .sk-soft circle {
+  stroke: var(--green);
+  stroke-width: 1.6px;
+  opacity: 0.75;
+}
+
+.bs-sketch .sk-note text {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  fill: var(--ink-3);
+  transition: opacity 0.4s linear;
+}
+
+/* the working drawing: white on blue */
+.bs-plan g path,
+.bs-plan g rect,
+.bs-plan g circle {
+  fill: none;
+  stroke: rgba(236, 243, 252, 0.9);
+  vector-effect: non-scaling-stroke;
+}
+
+.bs-plan .pl-dash rect {
+  stroke-width: 1.4px;
+  stroke-dasharray: 12 9;
+  stroke: rgba(236, 243, 252, 0.55);
+}
+
+.bs-plan .pl-grid circle,
+.bs-plan .pl-grid path {
+  stroke-width: 1.1px;
+  stroke: rgba(236, 243, 252, 0.6);
+}
+
+.bs-plan .pl-wall path {
+  stroke-width: 2.1px;
+}
+
+.bs-plan .pl-dim path {
+  stroke-width: 1px;
+  stroke: rgba(236, 243, 252, 0.6);
+  transition: opacity 0.4s linear;
+}
+
+.bs-plan .pl-tree circle {
+  stroke-width: 1.1px;
+  stroke: rgba(236, 243, 252, 0.4);
+  transition: opacity 0.4s linear;
+}
+
+.bs-plan text {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  fill: rgba(236, 243, 252, 0.92);
+}
+
+.bs-plan .pl-area {
+  font-size: 9px;
+  fill: rgba(236, 243, 252, 0.55);
+}
+
+.bs-plan .pl-dim text,
+.bs-plan .pl-tag text {
+  font-size: 9.5px;
+  fill: rgba(236, 243, 252, 0.7);
+}
+
+.bs-plan .pl-room,
+.bs-plan .pl-title {
+  transition: opacity 0.4s linear;
+}
+
+/* ----------------------------------------------------------------- scrim */
+
+.bs-scrim {
+  display: none;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 68%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(239, 236, 227, 0.95) 0%,
+    rgba(239, 236, 227, 0.86) 46%,
+    rgba(239, 236, 227, 0) 100%
+  );
+  transition: opacity 0.4s var(--ease);
+}
+
+.bs-scrim.on-dark {
+  background: linear-gradient(
+    180deg,
+    rgba(17, 24, 38, 0.92) 0%,
+    rgba(17, 24, 38, 0.82) 46%,
+    rgba(17, 24, 38, 0) 100%
+  );
+}
+
+@media (max-width: 900px) {
+  .bs-scrim {
+    display: block;
+  }
+}
+
+/* ---------------------------------------------------------------- labels */
+
+.bs-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.bs-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px 9px;
+  background: rgba(240, 237, 228, 0.93);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 2px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ------------------------------------------------------------------ copy */
+
+.bs-copy-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.bs-copy {
+  position: absolute;
+  left: clamp(20px, 4vw, 56px);
+  top: 50%;
+  translate: 0 -50%;
+  width: min(42ch, 46vw);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  will-change: opacity, transform;
+}
+
+.bs-copy .lede {
+  max-width: 38ch;
+  font-size: 0.95rem;
+}
+
+.bs-copy.bs-hero {
+  width: min(52ch, 56vw);
+  gap: 26px;
+}
+
+.bs-copy .d1 {
+  font-size: clamp(2.6rem, 6.4vw, 5.1rem);
+}
+
+.bs-l {
+  display: block;
+}
+
+.bs-copy.on-dark,
+.bs-copy.on-dark .d2,
+.bs-copy.on-dark .d1 {
+  color: var(--paper-hi);
+}
+
+.bs-copy.on-dark .eyebrow {
+  color: var(--tan);
+}
+
+.bs-copy.on-dark .lede {
+  color: rgba(239, 236, 227, 0.8);
+}
+
+.bs-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ink-3);
+}
+
+.bs-scroll i {
+  width: 56px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  animation: bs-pull 2.4s var(--ease) infinite;
+}
+
+@keyframes bs-pull {
+  0%,
+  100% {
+    transform: scaleX(0.4);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------------------------- title block */
+
+.bs-title {
+  position: absolute;
+  right: clamp(16px, 2.6vw, 34px);
+  bottom: clamp(16px, 2.6vw, 30px);
+  z-index: 5;
+  width: 268px;
+  background: rgba(243, 240, 232, 0.9);
+  border: 1px solid rgba(26, 26, 22, 0.35);
+  font-family: var(--mono);
+  color: var(--ink);
+  transition: background 0.5s var(--ease), border-color 0.5s var(--ease), color 0.5s var(--ease);
+}
+
+.bs-title.on-dark {
+  background: rgba(16, 24, 36, 0.62);
+  border-color: rgba(236, 243, 252, 0.4);
+  color: rgba(240, 244, 250, 0.95);
+}
+
+.bs-title-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 10px;
+  border-bottom: 1px solid currentColor;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.bs-title-name {
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 1;
+}
+
+.bs-title-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.bs-title-grid > div {
+  position: relative;
+  padding: 7px 10px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  min-height: 42px;
+}
+
+.bs-title-grid > div:nth-child(2n) {
+  border-right: 0;
+}
+
+.bs-title-grid > div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.bs-title-grid span {
+  display: block;
+  font-size: 7.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.bs-title-grid b {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* the little filled scale bar under SCALE */
+.bs-bar {
+  display: block;
+  margin-top: 5px;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor 0 10px,
+    transparent 10px 20px
+  );
+  opacity: 0.5;
+  width: 100%;
+}
+
+.bs-bar::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: calc(var(--n) * 100%);
+  background: currentColor;
+}
+
+@media (max-width: 760px) {
+  .bs-title {
+    width: 190px;
+    transform: scale(0.88);
+    transform-origin: bottom right;
+  }
+}
+
+/* ------------------------------------------------------------------ rail */
+
+.bs-rail {
+  position: absolute;
+  left: clamp(20px, 4vw, 56px);
+  bottom: clamp(16px, 2.6vw, 28px);
+  z-index: 5;
+  width: min(420px, 48vw);
+  color: var(--ink-3);
+  transition: color 0.5s var(--ease);
+}
+
+.bs-rail.on-dark {
+  color: rgba(239, 236, 227, 0.6);
+}
+
+.bs-rail-track {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  margin-bottom: 10px;
+}
+
+.bs-rail-track i {
+  display: block;
+  height: 3px;
+  margin-top: -1px;
+  background: var(--green);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.bs-rail.on-dark .bs-rail-track i {
+  background: var(--tan);
+}
+
+.bs-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.bs-rail li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease), color 0.4s var(--ease);
+}
+
+.bs-rail li.on {
+  opacity: 1;
+  color: var(--ink);
+}
+
+.bs-rail.on-dark li.on {
+  color: var(--paper-hi);
+}
+
+.bs-rail li b {
+  font-weight: 500;
+}
+
+@media (max-width: 760px) {
+  .bs-rail {
+    width: calc(100% - 40px);
+  }
+  .bs-rail li span {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ skip */
+
+.bs-skip {
+  position: absolute;
+  right: clamp(16px, 2.6vw, 34px);
+  top: calc(var(--hdr-h) + 14px);
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 13px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: rgba(243, 240, 232, 0.8);
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.5s var(--ease);
+}
+
+.bs-skip:hover {
+  background: var(--ink);
+  color: var(--paper-hi);
+  border-color: var(--ink);
+}
+
+.bs-skip.on-dark {
+  background: rgba(16, 24, 36, 0.4);
+  color: rgba(239, 236, 227, 0.8);
+  border-color: rgba(236, 243, 252, 0.35);
+}
+
+/* ---------------------------------------------------- stacked fallback */
+/* Shown only where WebGL is unavailable. The seven acts become a plain
+   scrolling page; the two drawn acts keep their drawings, and every act keeps
+   its sheet from the title block. */
+
+.bs-flat {
+  height: auto;
+}
+
+.bs-flat-row {
+  padding-block: clamp(52px, 7vw, 104px);
+  background: var(--paper);
+  border-top: 1px solid var(--line-soft);
+}
+
+.bs-flat-row:first-child {
+  border-top: 0;
+  padding-top: calc(var(--hdr-h) + clamp(44px, 6vw, 86px));
+}
+
+.bs-flat-row.dark {
+  background: var(--blue);
+  color: var(--paper-hi);
+  border-top-color: transparent;
+}
+
+.bs-flat-row.dark .d2,
+.bs-flat-row.dark .d1 {
+  color: var(--paper-hi);
+}
+
+.bs-flat-row.dark .eyebrow {
+  color: var(--tan);
+}
+
+.bs-flat-row.dark .lede {
+  color: rgba(239, 236, 227, 0.8);
+}
+
+.bs-flat-row.dark .ac {
+  color: var(--tan);
+}
+
+.bs-flat-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.bs-flat .bs-copy {
+  position: static;
+  translate: none;
+  /* px, not ch: this box is set in the sans face, the heading in the serif */
+  width: 100%;
+  max-width: 480px;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.bs-flat .bs-copy.bs-hero {
+  max-width: 560px;
+}
+
+.bs-flat .bs-copy .d1 {
+  font-size: clamp(2.6rem, 5.4vw, 4.4rem);
+}
+
+.bs-flat-art {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 22px;
+}
+
+.bs-flat-art .bs-svg {
+  width: 100%;
+  transform: none;
+}
+
+.bs-flat-title {
+  position: static;
+  width: 268px;
+}
+
+@media (max-width: 860px) {
+  .bs-flat-inner {
+    grid-template-columns: 1fr;
+  }
+  .bs-flat-art {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .bs-copy {
+    width: min(90vw, 44ch);
+    top: auto;
+    translate: none;
+    bottom: auto;
+    top: calc(var(--hdr-h) + 74px);
+    gap: 14px;
+  }
+  .bs-copy.bs-hero {
+    width: min(92vw, 42ch);
+    gap: 18px;
+  }
+  .bs-copy .d1 {
+    font-size: clamp(2.3rem, 10.5vw, 3.2rem);
+  }
+  .bs-copy .d2 {
+    font-size: clamp(1.75rem, 7.6vw, 2.3rem);
+  }
+  .bs-copy .lede {
+    font-size: 0.88rem;
+  }
+  /* the long strapline is set tighter so it keeps to two lines */
+  .bs-copy.bs-hero .eyebrow {
+    display: block;
+    font-size: 0.54rem;
+    letter-spacing: 0.16em;
+    line-height: 1.7;
+  }
+  .bs-copy.bs-hero .eyebrow::before {
+    display: none;
+  }
+  .bs-scroll {
+    font-size: 0.56rem;
+  }
+  .bs-scroll i {
+    width: 34px;
+  }
+}
+
+@media (max-width: 760px) {
+  .bs-title {
+    width: 164px;
+    transform: scale(0.82);
+    bottom: 10px;
+    right: 8px;
+  }
+  .bs-rail {
+    left: 16px;
+    bottom: 18px;
+    width: calc(100% - 170px);
+  }
+  .bs-title-grid b {
+    font-size: 8.4px;
+    letter-spacing: 0.06em;
+  }
+}

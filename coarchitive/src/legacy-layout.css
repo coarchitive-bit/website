@@ -1,0 +1,31 @@
+/* ===========================================================================
+   Layout primitives carried over from the previous stylesheet, unchanged in
+   structure. pages-skin.css restyles them; this file only restores the
+   geometry the inner pages are built on.
+   =========================================================================== */
+
+/* ---------- layout ---------- */
+
+/* every page opens on a dark hero that runs up under the transparent header */
+.main { padding-top: 0; }
+.sec { padding: clamp(60px, 8vw, 128px) var(--pad); }
+.sec.grey { background: var(--grey); }
+.sec.dark { background: var(--dark); color: #f2f1ee; }
+.sec.dark .eyebrow { color: var(--sand); }
+.sec.dark .text-link { border-color: #fff; }
+.sec.dark .text-link:hover { color: var(--sand); border-color: var(--sand); }
+
+.shead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: clamp(32px, 4vw, 58px);
+}
+.shead h2 {
+  margin-top: 14px;
+  font-size: clamp(32px, 4.6vw, 64px);
+  line-height: 1.02;
+}
+
+/* people and person rules live in pages-skin.css */
